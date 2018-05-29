@@ -1,5 +1,6 @@
-let connection = require("../config/db");
-let moment = require("../config/moment");
+const connection = require("../config/db");
+const moment = require("../config/moment");
+const md5 = require('md5');
 
 class Client {
   constructor(row) {
@@ -25,7 +26,7 @@ class Client {
   static create(login, mdp, cb) {
     connection.query(
       "INSERT INTO client SET login = ? , mdp = ? , created_at = ?",
-      [login, mdp, new Date()],
+      [login, md5(mdp), new Date()],
       (err, result) => {
         if (err) throw err;
         cb(result);
@@ -47,8 +48,9 @@ class Client {
   static findByLoginAndMdp(login, mdp, cb) {
     connection.query(
       "SELECT * FROM client WHERE login = ? AND mdp = ? LIMIT 1",
-      [login, mdp],
+      [login, md5(mdp)],
       (err, rows) => {
+        if (err) throw err;
         if (!Array.isArray(rows) || rows.length == 0) {
           cb(undefined);
         } else {
@@ -63,11 +65,22 @@ class Client {
       "SELECT * FROM client WHERE login = ? LIMIT 1",
       [login],
       (err, rows) => {
+        if (err) throw err;
         if (!Array.isArray(rows) || rows.length == 0) {
           cb(undefined);
         } else {
           cb(new Client(rows[0]));
         }
+      }
+    );
+  }
+  static changMDP(login, oldPW, newPW, cb) {
+    connection.query(
+      "UPDATE client set mdp = ? WHERE login = ? AND mdp = ?",
+      [md5(newPW), login, md5(oldPW)],
+      (err, result) => {
+        if (err) throw err;
+        cb(result);
       }
     );
   }

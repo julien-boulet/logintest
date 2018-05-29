@@ -51,16 +51,32 @@ app
         response.redirect("/");
       } else {
         Client.create(login, mdp, result => {
-          if( result.affectedRows == 1){
-              request.flash("success", "Compte créé");
+          if (result.affectedRows == 1) {
+            request.flash("success", "Compte créé");
+            response.render("info-page.ejs", { login: login });
+          } else {
+            request.flash("error", "une erreur s'est produite");
+            response.redirect("/");
+          }
+        });
+      }
+    });
+  })
+  .post("/changeMDP", (request, response) => {
+    var login = request.body.login;
+    var oldPW = request.body.oldPW;
+    var newPW = request.body.newPW;
+
+    console.log({ login, oldPW, newPW });
+      Client.changMDP(login, oldPW, newPW, result => {
+          if (result.affectedRows == 1) {
+              request.flash("success", "MDP changé");
               response.render("info-page.ejs", { login: login });
           } else {
               request.flash("error", "une erreur s'est produite");
               response.redirect("/");
           }
-        });
-      }
-    });
+      });
   });
 
 server.listen(8081);

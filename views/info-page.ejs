@@ -1,4 +1,19 @@
 <% include header %>
 <h1>Info sur <%= login %></h1>
 
+<h1>Changer le mot de passe</h1>
+<form id="loginForm" action="/changeMDP" method="post">
+    <input type="hidden" id="login" name="login" value="<%=login%>">
+    <table>
+        <tr>
+            <td><label> Ancien MDP: </label></td>
+            <td><input type="password" id="oldPW" name="oldPW"/></td>
+        </tr>
+        <tr>
+            <td><label> Nouveau MDP: </label></td>
+            <td><input type="password" id="newPW" name="newPW"/></td>
+        </tr>
+    </table>
+    <input type="submit" value="Changer"/>
+</form>
 <% include footer %>
