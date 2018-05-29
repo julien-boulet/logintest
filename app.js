@@ -25,9 +25,6 @@ app
   .get("/", (request, response) => {
     response.render("login-page.ejs");
   })
-  .get("/info", (request, response) => {
-    response.render("info-page.ejs");
-  })
   .post("/connectAccount", (request, response) => {
     var login = request.body.login;
     var mdp = request.body.mdp;
@@ -68,15 +65,15 @@ app
     var newPW = request.body.newPW;
 
     console.log({ login, oldPW, newPW });
-      Client.changMDP(login, oldPW, newPW, result => {
-          if (result.affectedRows == 1) {
-              request.flash("success", "MDP changé");
-              response.render("info-page.ejs", { login: login });
-          } else {
-              request.flash("error", "une erreur s'est produite");
-              response.redirect("/");
-          }
-      });
+    Client.changMDP(login, oldPW, newPW, result => {
+      if (result.affectedRows == 1) {
+        request.flash("success", "MDP changé");
+        response.render("info-page.ejs", { login: login });
+      } else {
+        request.flash("error", "une erreur s'est produite");
+        response.redirect("/");
+      }
+    });
   });
 
 server.listen(8081);

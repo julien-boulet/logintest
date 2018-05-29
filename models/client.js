@@ -1,6 +1,6 @@
 const connection = require("../config/db");
 const moment = require("../config/moment");
-const md5 = require('md5');
+const md5 = require("md5");
 
 class Client {
   constructor(row) {
