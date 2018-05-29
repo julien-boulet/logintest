@@ -74,6 +74,7 @@ class Client {
       }
     );
   }
+
   static changMDP(login, oldPW, newPW, cb) {
     connection.query(
       "UPDATE client set mdp = ? WHERE login = ? AND mdp = ?",

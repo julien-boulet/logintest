@@ -26,8 +26,8 @@ app
     response.render("login-page.ejs");
   })
   .post("/connectAccount", (request, response) => {
-    var login = request.body.login;
-    var mdp = request.body.mdp;
+    const login = request.body.login;
+    const mdp = request.body.mdp;
 
     Client.findByLoginAndMdp(login, mdp, client => {
       if (client == undefined) {
@@ -39,8 +39,8 @@ app
     });
   })
   .post("/createAccount", (request, response) => {
-    var login = request.body.login;
-    var mdp = request.body.mdp;
+    const login = request.body.login;
+    const mdp = request.body.mdp;
 
     Client.findByLogin(login, client => {
       if (client != undefined) {
@@ -60,18 +60,17 @@ app
     });
   })
   .post("/changeMDP", (request, response) => {
-    var login = request.body.login;
-    var oldPW = request.body.oldPW;
-    var newPW = request.body.newPW;
+    const login = request.body.login;
+    const oldPW = request.body.oldPW;
+    const newPW = request.body.newPW;
 
-    console.log({ login, oldPW, newPW });
     Client.changMDP(login, oldPW, newPW, result => {
       if (result.affectedRows == 1) {
         request.flash("success", "MDP changé");
         response.render("info-page.ejs", { login: login });
       } else {
         request.flash("error", "une erreur s'est produite");
-        response.redirect("/");
+        response.render("info-page.ejs", { login: login });
       }
     });
   });
