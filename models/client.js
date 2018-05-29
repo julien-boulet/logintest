@@ -33,7 +33,7 @@ class Client {
     );
   }
 
-  static find(id, cb) {
+  static findbyId(id, cb) {
     connection.query(
       "SELECT * FROM client WHERE id = ? LIMIT 1",
       [id],
@@ -44,15 +44,29 @@ class Client {
     );
   }
 
-  static find(login, mdp, cb) {
+  static findByLoginAndMdp(login, mdp, cb) {
     connection.query(
       "SELECT * FROM client WHERE login = ? AND mdp = ? LIMIT 1",
       [login, mdp],
-      (err, rows, fields) => {
-        if(!Array.isArray(rows.length)){
-            cb(undefined);
+      (err, rows) => {
+        if (!Array.isArray(rows) || rows.length == 0) {
+          cb(undefined);
         } else {
-            cb(new Client(rows[0]));
+          cb(new Client(rows[0]));
+        }
+      }
+    );
+  }
+
+  static findByLogin(login, cb) {
+    connection.query(
+      "SELECT * FROM client WHERE login = ? LIMIT 1",
+      [login],
+      (err, rows) => {
+        if (!Array.isArray(rows) || rows.length == 0) {
+          cb(undefined);
+        } else {
+          cb(new Client(rows[0]));
         }
       }
     );

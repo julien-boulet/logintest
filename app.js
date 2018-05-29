@@ -25,16 +25,40 @@ app
   .get("/", (request, response) => {
     response.render("login-page.ejs");
   })
-  .post("/connecter", (request, response) => {
+  .get("/info", (request, response) => {
+    response.render("info-page.ejs");
+  })
+  .post("/connectAccount", (request, response) => {
     var login = request.body.login;
     var mdp = request.body.mdp;
-    console.log({ login, mdp });
 
-    Client.find(login, mdp, function(client) {
+    Client.findByLoginAndMdp(login, mdp, client => {
       if (client == undefined) {
-        console.log("3 : " + client);
         request.flash("error", "Compte inconnu");
         response.redirect("/");
+      } else {
+        response.render("info-page.ejs", { login: login });
+      }
+    });
+  })
+  .post("/createAccount", (request, response) => {
+    var login = request.body.login;
+    var mdp = request.body.mdp;
+
+    Client.findByLogin(login, client => {
+      if (client != undefined) {
+        request.flash("error", "login déjà utilisé");
+        response.redirect("/");
+      } else {
+        Client.create(login, mdp, result => {
+          if( result.affectedRows == 1){
+              request.flash("success", "Compte créé");
+              response.render("info-page.ejs", { login: login });
+          } else {
+              request.flash("error", "une erreur s'est produite");
+              response.redirect("/");
+          }
+        });
       }
     });
   });

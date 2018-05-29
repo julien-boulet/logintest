@@ -1,6 +1,6 @@
 <% include header %>
 <h1>Identifiez vous</h1>
-<form id="loginForm" action="/connecter" method="post">
+<form id="loginForm" action="/connectAccount" method="post">
     <table>
         <tr>
             <td><label> Login: </label></td>
@@ -12,5 +12,20 @@
         </tr>
     </table>
     <input type="submit" value="Connecter"/>
+</form>
+
+<h1>Creer un compte</h1>
+<form id="loginForm" action="/createAccount" method="post">
+    <table>
+        <tr>
+            <td><label> Login: </label></td>
+            <td><input type="text" id="login" name="login"/></td>
+        </tr>
+        <tr>
+            <td><label> Mot de passe: </label></td>
+            <td><input type="password" id="mdp" name="mdp"/></td>
+        </tr>
+    </table>
+    <input type="submit" value="Creer"/>
 </form>
 <% include footer %>
