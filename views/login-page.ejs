@@ -1,0 +1,16 @@
+<% include header %>
+<h1>Identifiez vous</h1>
+<form id="loginForm" action="/connecter" method="post">
+    <table>
+        <tr>
+            <td><label> Login: </label></td>
+            <td><input type="text" id="login" name="login"/></td>
+        </tr>
+        <tr>
+            <td><label> Mot de passe: </label></td>
+            <td><input type="text" id="mdp" name="mdp"/></td>
+        </tr>
+    </table>
+    <input type="submit" value="Connecter"/>
+</form>
+<% include footer %>
