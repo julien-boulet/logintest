@@ -40,7 +40,11 @@ class Client {
       [id],
       (err, rows) => {
         if (err) throw err;
-        cb(new Client(rows[0]));
+        if (!Array.isArray(rows) || rows.length == 0) {
+          cb(undefined);
+        } else {
+          cb(new Client(rows[0]));
+        }
       }
     );
   }

@@ -23,7 +23,28 @@ app.use(require("./middlewares/flash"));
 // Routes
 app
   .get("/", (request, response) => {
-    response.render("login-page.ejs");
+    if (request.session.id) {
+      const clientId = request.session.clientId;
+      Client.findbyId(clientId, client => {
+        if (client != undefined) {
+          request.session.clientId = client.id;
+          response.render("info-page.ejs", { login: client.login });
+        } else {
+          response.render("login-page.ejs");
+        }
+      });
+    } else {
+      response.render("login-page.ejs");
+    }
+  })
+  .get("/logout", function(req, res) {
+    req.session.destroy(err => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.redirect("/");
+      }
+    });
   })
   .post("/connectAccount", (request, response) => {
     const login = request.body.login;
@@ -34,6 +55,7 @@ app
         request.flash("error", "Compte inconnu");
         response.redirect("/");
       } else {
+        request.session.clientId = client.id;
         response.render("info-page.ejs", { login: login });
       }
     });
@@ -56,7 +78,8 @@ app
         } else {
           Client.create(login, mdp, result => {
             if (result.affectedRows == 1) {
-              request.flash("success", "Compte créé");
+              response.flash("success", "Compte créé");
+              request.session.clientId = result.insertId;
               response.render("info-page.ejs", { login: login });
             } else {
               request.flash("error", "une erreur s'est produite");
