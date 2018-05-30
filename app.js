@@ -42,37 +42,52 @@ app
     const login = request.body.login;
     const mdp = request.body.mdp;
 
-    Client.findByLogin(login, client => {
-      if (client != undefined) {
-        request.flash("error", "login déjà utilisé");
-        response.redirect("/");
-      } else {
-        Client.create(login, mdp, result => {
-          if (result.affectedRows == 1) {
-            request.flash("success", "Compte créé");
-            response.render("info-page.ejs", { login: login });
-          } else {
-            request.flash("error", "une erreur s'est produite");
-            response.redirect("/");
-          }
-        });
-      }
-    });
+    if (mdp === undefined || mdp == "") {
+      request.flash("error", "Le MDP ne doit pas etre vide");
+      response.redirect("/");
+    } else if (login === undefined || login == "") {
+      request.flash("error", "Le login ne doit pas etre vide");
+      response.redirect("/");
+    } else {
+      Client.findByLogin(login, client => {
+        if (client != undefined) {
+          request.flash("error", "login déjà utilisé");
+          response.redirect("/");
+        } else {
+          Client.create(login, mdp, result => {
+            if (result.affectedRows == 1) {
+              request.flash("success", "Compte créé");
+              response.render("info-page.ejs", { login: login });
+            } else {
+              request.flash("error", "une erreur s'est produite");
+              response.redirect("/");
+            }
+          });
+        }
+      });
+    }
   })
   .post("/changeMDP", (request, response) => {
     const login = request.body.login;
     const oldPW = request.body.oldPW;
     const newPW = request.body.newPW;
 
-    Client.changMDP(login, oldPW, newPW, result => {
-      if (result.affectedRows == 1) {
-        request.flash("success", "MDP changé");
+    if (newPW === undefined || newPW == "") {
+      response.flash("error", "Le nouveau MDP ne doit pas etre vide");
+      response.render("info-page.ejs", { login: login });
+    } else if (newPW == oldPW) {
+      response.flash("error", "Le nouveau MDP doit etre different de l'ancien");
+      response.render("info-page.ejs", { login: login });
+    } else {
+      Client.changMDP(login, oldPW, newPW, result => {
+        if (result.affectedRows == 1) {
+          response.flash("success", "MDP changé");
+        } else {
+          response.flash("error", "une erreur s'est produite");
+        }
         response.render("info-page.ejs", { login: login });
-      } else {
-        request.flash("error", "une erreur s'est produite");
-        response.render("info-page.ejs", { login: login });
-      }
-    });
+      });
+    }
   });
 
 server.listen(8081);
