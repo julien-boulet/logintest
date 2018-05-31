@@ -2,7 +2,6 @@ const app = require("express")();
 const server = require("http").createServer(app);
 const bodyParser = require("body-parser");
 const Client = require("./models/client");
-const session = require("express-session");
 
 // Moteur de template
 app.set("view engine", "ejs");
@@ -10,14 +9,7 @@ app.set("view engine", "ejs");
 // Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(
-  session({
-    secret: "aazeazeeaz",
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false }
-  })
-);
+app.use(require("./middlewares/session"));
 app.use(require("./middlewares/flash"));
 
 // Routes
