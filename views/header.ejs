@@ -1,27 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Demo</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.css">
-  <style>
-    .main.container {
-      margin-top: 7em;
-    }
-  </style>
+    <title>Demo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.css">
+    <style>
+        .main.container {
+            margin-top: 7em;
+        }
+    </style>
 </head>
 <body>
 <div class="ui fixed inverted menu">
-  <a href="/" class="header item">Accueil</a>
-  <a href="/logout" class="header item">Deconnection</a>
+    <a href="/" class="header item">Accueil</a>
+    <a href="/logout" class="header item">Deconnection</a>
 </div>
 <div class="ui main container">
-  <% if (locals.flash && locals.flash.error) { %>
-  <div class="ui negative message">
-    <%= flash.error %>
-  </div>
-  <% } %>
-  <% if (locals.flash && locals.flash.success) { %>
-  <div class="ui positive message">
-    <%= flash.success %>
-  </div>
+    <% if (locals.flash && locals.flash.error) { %>
+    <div class="ui negative message">
+        <%= flash.error %>
+    </div>
+    <% } %>
+    <% if (locals.flash && locals.flash.success) { %>
+    <div class="ui positive message">
+        <%= flash.success %>
+    </div>
 <% } %>

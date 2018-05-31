@@ -3,7 +3,7 @@
 
 <h1>Changer le mot de passe</h1>
 <form id="loginForm" action="/changeMDP" method="post">
-    <input type="hidden" id="login" name="login" value="<%=login%>">
+    <input type="hidden" id="login" name="login" value="<%= login %>">
     <table>
         <tr>
             <td><label> Ancien MDP: </label></td>
@@ -19,8 +19,8 @@
 
 <h1>Ajouter des photos de profil</h1>
 <form id="profilPicture" enctype="multipart/form-data" action="upload/profilPicture" method="post">
-    <input type="file" name="profilPicture" multiple />
-    <input type="submit" name="submit" id="btnSubmit" value="Upload" />
+    <input type="file" name="profilPicture" multiple/>
+    <input type="submit" name="submit" id="btnSubmit" value="Upload"/>
 </form>
 
 <% include footer %>
