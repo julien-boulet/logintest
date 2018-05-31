@@ -2,6 +2,17 @@ const app = require("express")();
 const server = require("http").createServer(app);
 const bodyParser = require("body-parser");
 const Client = require("./models/client");
+const multer = require("multer");
+
+var storage = multer.diskStorage({
+  destination: function(req, file, callback) {
+    callback(null, "./profilPictures");
+  },
+  filename: function(req, file, callback) {
+    callback(null, file.fieldname + "-" + Date.now());
+  }
+});
+const upload = multer({ storage: storage }).array("profilPicture", 2);
 
 // Moteur de template
 app.set("view engine", "ejs");
@@ -103,6 +114,13 @@ app
         response.render("info-page.ejs", { login: login });
       });
     }
+  })
+  .post("/upload/profilPicture", (req, res) => {
+    upload(req, res, err => {
+      if (err) {
+        return res.end("Something went wrong!");
+      }
+    });
   });
 
 server.listen(8081);

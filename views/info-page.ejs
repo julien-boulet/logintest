@@ -17,4 +17,10 @@
     <input type="submit" value="Changer"/>
 </form>
 
+<h1>Ajouter des photos de profil</h1>
+<form id="profilPicture" enctype="multipart/form-data" action="upload/profilPicture" method="post">
+    <input type="file" name="profilPicture" multiple />
+    <input type="submit" name="submit" id="btnSubmit" value="Upload" />
+</form>
+
 <% include footer %>
