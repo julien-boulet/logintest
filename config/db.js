@@ -11,14 +11,14 @@ connection = {
   query: function() {
     var queryArgs = Array.prototype.slice.call(arguments);
 
-    pool.getConnection(function(err, connection) {
+    pool.getConnection(function(err, conn) {
       if (err) {
         throw err;
       }
-      if (connection) {
-        var q = connection.query.apply(connection, queryArgs);
+      if (conn) {
+        var q = conn.query.apply(conn, queryArgs);
         q.on("end", function() {
-          connection.release();
+          conn.release();
         });
       }
     });
