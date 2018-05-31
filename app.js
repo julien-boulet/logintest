@@ -9,7 +9,10 @@ var storage = multer.diskStorage({
     callback(null, "./profilPictures");
   },
   filename: function(req, file, callback) {
-    callback(null, file.fieldname + "-" + Date.now());
+    callback(
+      null,
+      file.fieldname + "-" + currentClient.id + "-" + file.originalname
+    );
   }
 });
 const upload = multer({ storage: storage }).array("profilPicture", 2);
@@ -22,6 +25,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(require("./middlewares/session"));
 app.use(require("./middlewares/flash"));
+
+// stock le client logguer
+var currentClient = null;
 
 // Routes
 app
@@ -45,6 +51,7 @@ app
       if (err) {
         console.log(err);
       } else {
+        currentClient = null;
         res.redirect("/");
       }
     });
@@ -55,9 +62,11 @@ app
 
     Client.findByLoginAndMdp(login, mdp, client => {
       if (client == undefined) {
+        currentClient = null;
         request.flash("error", "Compte inconnu");
         response.redirect("/");
       } else {
+        currentClient = client;
         request.session.clientId = client.id;
         response.render("info-page.ejs", { login: login });
       }
@@ -81,6 +90,8 @@ app
         } else {
           Client.create(login, mdp, result => {
             if (result.affectedRows == 1) {
+              // todo : faire un select pour recuperer le client et le mettre dans currentClient
+
               response.flash("success", "Compte créé");
               request.session.clientId = result.insertId;
               response.render("info-page.ejs", { login: login });
